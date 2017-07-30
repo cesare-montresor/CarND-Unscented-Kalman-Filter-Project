@@ -3,7 +3,7 @@
 
 # Unscented Kalman Filter Project
 
-This project implement an extended kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. 
+This project implement an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. 
 
 ![ukf]
 
