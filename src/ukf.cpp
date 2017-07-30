@@ -45,16 +45,7 @@ UKF::UKF() {
   std_a_ = 1;
   
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.3;
-  
- 
-  /**
-  TODO:
-
-  Complete the initialization. See ukf.h for other member properties.
-
-  Hint: one or more values initialized above might be wildly off...
-  */
+  std_yawdd_ = 1.5;
   
   
   ///* State dimension
@@ -143,11 +134,12 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
     }else if( use_radar_ && meas_package.sensor_type_ == MeasurementPackage::RADAR){
       x_<< t.Polar2Cartesian(meas[0], meas[1], meas[2]),0;
     }
-     
+    
+    /*
     cout<<"\n---------------- AFTER INIT ----------------\n";
     cout<<"X:\n"<<x_<<"\n";
     cout<<"P:\n"<<P_<<"\n";
-
+*/
     
     is_initialized_ = true;
     return;
@@ -368,7 +360,7 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   MatrixXd Zsig = MatrixXd::Zero(n_z, sigma_count_);
   //transform sigma points into measurement space
   for (int i = 0; i < sigma_count_ ; i++) {  //2n+1 simga points
-    
+    cout<<Xsig_pred_.col(i);
     // extract values for better readibility
     double p_x = Xsig_pred_(0,i);
     double p_y = Xsig_pred_(1,i);
@@ -386,7 +378,8 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
       Zsig(2,i) = (p_x*v1 + p_y*v2 ) / r;                       //r_dot
     }
     else{
-      Zsig(2,i) = 0; //
+      //need a better way to initialize R_dot, it skerw my NIS and RMSE for the first 1-2 readings :(
+      Zsig(2,i) = 0;
     }
   }
   
@@ -427,8 +420,8 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
   MatrixXd K = Tc * S_inverse; //Kalman gain K;
   VectorXd z_diff = meas_package.raw_measurements_ - z_pred; //residual
   z_diff(1) = t.NormalizeAngle(z_diff(1));
-  cout<<"\nraw_measurements_:\n"<<meas_package.raw_measurements_<<"\n";
-  cout<<"\nz_diff:\n"<<z_diff<<"\n";
+//cout<<"\nraw_measurements_:\n"<<meas_package.raw_measurements_<<"\n";
+//  cout<<"\nz_diff:\n"<<z_diff<<"\n";
   //update state mean and covariance matrix
   x_ = x_ + K * z_diff;
   P_ = P_ - K*S*K.transpose();
