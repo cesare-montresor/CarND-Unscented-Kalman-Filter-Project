@@ -1,18 +1,23 @@
 #ifndef UKF_H
 #define UKF_H
 
-#include "measurement_package.h"
 #include "Eigen/Dense"
 #include <vector>
 #include <string>
 #include <fstream>
+
+#include "measurement_package.h"
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 class UKF {
 public:
-
+  Tools t;
+  ofstream nis_lidar_;
+  ofstream nis_radar_;
+  
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
 
@@ -24,15 +29,19 @@ public:
 
   ///* state vector: [pos1 pos2 vel_abs yaw_angle yaw_rate] in SI units and rad
   VectorXd x_;
+  VectorXd x_aug_;
 
   ///* state covariance matrix
   MatrixXd P_;
+  MatrixXd P_aug_;
 
   ///* predicted sigma points matrix
   MatrixXd Xsig_pred_;
 
   ///* time when the state is true, in us
   long long time_us_;
+  
+  long long previous_timestamp_;
 
   ///* Process noise standard deviation longitudinal acceleration in m/s^2
   double std_a_;
@@ -57,7 +66,7 @@ public:
 
   ///* Weights of sigma points
   VectorXd weights_;
-
+  
   ///* State dimension
   int n_x_;
 
@@ -66,8 +75,13 @@ public:
 
   ///* Sigma point spreading parameter
   double lambda_;
+  
+  int sigma_count_;
+  double sigma_spread_;
 
-
+  MatrixXd R_radar_;
+  MatrixXd R_lidar_;
+  
   /**
    * Constructor
    */
@@ -90,7 +104,13 @@ public:
    * @param delta_t Time between k and k+1 in s
    */
   void Prediction(double delta_t);
-
+  
+  // prediction sub operations
+  MatrixXd GenerateSigmaPoints();
+  MatrixXd PredictSigmaPoints(MatrixXd Xsig_aug, double delta_t);
+  void UpdateMeanAndCovariance();
+  void ConvertSigmaToMesurment(int n_z, MatrixXd &S, MatrixXd &R);
+  
   /**
    * Updates the state and the state covariance matrix using a laser measurement
    * @param meas_package The measurement at k+1

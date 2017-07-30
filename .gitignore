@@ -1,5 +1,11 @@
 # silly macOS
 .DS_Store
 
+# src
+src/Eigen/*	
+
 # build files
 build/
+ide_profiles/xcode/CMakeFiles/*
+ide_profiles/xcode/UKF.build/*
+ide_profiles/xcode/Debug/*

@@ -394,7 +394,7 @@ class DenseCoeffsBase<Derived, WriteAccessors> : public DenseCoeffsBase<Derived,
       eigen_assert(index >= 0 && index < size());
       return derived().coeffRef(index);
     }
-
+    
     /** equivalent to operator[](0).  */
 
     EIGEN_STRONG_INLINE Scalar&
