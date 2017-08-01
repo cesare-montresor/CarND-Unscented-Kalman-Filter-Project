@@ -9,7 +9,7 @@
 This project implement an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. 
 
 ![ukf_ds1]
-![ukf_ds1]
+![ukf_ds2]
 
 # Current solution
 The current solution have been developed using xcode 8.3.3 and tested with the term2 simulator provided, the reported RMSE is:   
