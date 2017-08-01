@@ -16,12 +16,8 @@ The current solution have been developed using xcode 8.3.3 and tested with the t
 Dataset 1: 0.06 0.08 0.30 0.37
 Dataset 2: 0.07 0.06 0.51 0.27
 The code is fairely organized, modular and it appears to run smoothly, basic optimization have been put in place. 
+
 # Parameter tuning and NIS 
 
-NIS Radar
-
 ![nis_radar]
-
-NIS Lidar
-
 ![nis_lidar]
