@@ -43,15 +43,12 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 }
 
 VectorXd Tools::Polar2Cartesian(float distance,float angle,float velocity){
-  VectorXd result=VectorXd(4);
+  VectorXd result=VectorXd(2);
   
   float px = distance * std::cos(angle);
   float py = distance * std::sin(angle);
-  float vx = velocity * std::cos(angle);
-  float vy = velocity * std::sin(angle);
   
-  //cout<<"px: \t"<<(int)px<<"\tpy: \t"<<(int)py<<"distance: \t"<<distance<<"\tangle: \t"<<angle<<"\tvelocity: \t"<<velocity<<"\n";
-  result << px, py, vx, vy;
+  result << px, py;
   return result;
 }
 
